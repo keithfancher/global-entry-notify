@@ -3,7 +3,6 @@
 # Note: for setting up email with sendmail, see: http://linuxconfig.org/configuring-gmail-as-sendmail-email-relay
 
 import argparse
-import commands
 import json
 import logging
 import smtplib
@@ -77,9 +76,6 @@ def notify_send_email(dates, current_apt, settings, use_gmail=False):
         logging.exception('Failed to send succcess e-mail.')
         log(e)
 
-def notify_osx(msg):
-    commands.getstatusoutput("osascript -e 'display notification \"%s\" with title \"Global Entry Notifier\"'" % msg)
-
 def notify_sms(settings, dates):
     for avail_apt in dates: 
         try:
@@ -146,7 +142,7 @@ def main(settings):
     logging.info(msg + (' Sending email.' if not settings.get('no_email') else ' Not sending email.'))
 
     if settings.get('notify_osx'):
-        notify_osx(msg)
+        logging.warning('OSX notifications no longer supported! You should probably remove the `notify_osx` field from your config.')
     if not settings.get('no_email'):
         notify_send_email(dates, current_apt, settings, use_gmail=settings.get('use_gmail'))
     if settings.get('twilio_account_sid'):
