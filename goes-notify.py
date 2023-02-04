@@ -127,7 +127,8 @@ def main(settings):
         if not dates:
             return
 
-        hash = hashlib.md5(''.join(dates) + current_apt.strftime('%B %d, %Y @ %I:%M%p')).hexdigest()
+        hkey = ''.join(dates) + current_apt.strftime('%B %d, %Y @ %I:%M%p')
+        hash = hashlib.md5(hkey.encode('utf-8')).hexdigest()
         fn = "goes-notify_{0}.txt".format(hash)
         if settings.get('no_spamming') and os.path.exists(fn):
             return
@@ -190,7 +191,7 @@ if __name__ == '__main__':
             settings = json.load(json_file)
 
             # merge args into settings IF they're True
-            for key, val in arguments.iteritems():
+            for key, val in arguments.items():
                 if not arguments.get(key): continue
                 settings[key] = val
 
